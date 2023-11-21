@@ -1,20 +1,22 @@
-# Quartz v4
+# My-Notes
 
-> “[One] who works with the door open gets all kinds of interruptions, but [they] also occasionally gets clues as to what the world is and what might be important.” — Richard Hamming
+> 注意：在线网站不能保证 100% 还原 Obsidian 笔记内容，推荐使用本地方式浏览
 
-Quartz is a set of tools that helps you publish your [digital garden](https://jzhao.xyz/posts/networked-thought) and notes as a website for free.
-Quartz v4 features a from-the-ground rewrite focusing on end-user extensibility and ease-of-use.
+个人笔记，通过 [Obsidian](https://obsidian.md/) 管理，在线网站由 [GitHub Pages](https://pages.github.com/) 和 [Quartz](https://github.com/jackyzha0/quartz) 提供支持。
 
-**If you are looking for Quartz v3, you can find it on the [`hugo` branch](https://github.com/jackyzha0/quartz/tree/hugo).**
+GitHub 地址：https://github.com/xurenda/my-notes
 
-🔗 Read the documentation and get started: https://quartz.jzhao.xyz/
+## 使用方式
 
-[Join the Discord Community](https://discord.gg/cRFFHYye7t)
+### 本地浏览
 
-## Sponsors
+1. clone 本仓库到本地：`git clone https://github.com/xurenda/my-notes.git`
+2. 下载 Obsidian：[https://obsidian.md/download](https://obsidian.md/download)
+3. 使用 Obsidian 打开本仓库
+      ![使用 Obsidian 打开本仓库](./assets/1.png)
+4. 为了更好的体验，可以启用仓库内置的 Obsidian 插件（非必须）
+      ![启用仓库内置的 Obsidian 插件](./assets/2.png)
 
-<p align="center">
-  <a href="https://github.com/sponsors/jackyzha0">
-    <img src="https://cdn.jsdelivr.net/gh/jackyzha0/jackyzha0/sponsorkit/sponsors.svg" />
-  </a>
-</p>
+### 在线网站
+
+[xurenda.github.io](xurenda.github.io)
