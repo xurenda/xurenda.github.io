@@ -9,7 +9,7 @@ const config: QuartzConfig = {
     analytics: {
       provider: "plausible",
     },
-    baseUrl: "xurenda.github.io/my-notes-site",
+    baseUrl: "xurenda.github.io",
     ignorePatterns: [".obsidian", ".git", ".gitignore", "README.md", "**/drawing"],
     defaultDateType: "created",
     theme: {
@@ -65,7 +65,7 @@ const config: QuartzConfig = {
       Plugin.TagPage(),
       Plugin.ContentIndex({
         enableSiteMap: true,
-        enableRSS: true,
+        enableRSS: false,
       }),
       Plugin.Assets(),
       Plugin.Static(),
