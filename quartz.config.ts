@@ -9,7 +9,7 @@ const config: QuartzConfig = {
     analytics: {
       provider: "plausible",
     },
-    baseUrl: "quartz.jzhao.xyz",
+    baseUrl: "xurenda.github.io/my-notes-site/",
     ignorePatterns: [".obsidian", ".git", ".gitignore", "README.md", "**/drawing"],
     defaultDateType: "created",
     theme: {
