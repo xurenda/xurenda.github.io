@@ -10,7 +10,7 @@ const config: QuartzConfig = {
       provider: "plausible",
     },
     baseUrl: "xurenda.github.io",
-    ignorePatterns: [".obsidian", ".git", ".gitignore", "README.md", "**/drawing"],
+    ignorePatterns: [".obsidian", ".git", ".github", ".gitignore", "README.md", "**/drawing"],
     defaultDateType: "created",
     theme: {
       typography: {
