@@ -17,10 +17,10 @@ jobs:
     steps:
     # Checkout the repository to the GitHub Actions runner
     - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 # Fetch all history for git info
-          submodules: recursive
-          token: ${{ secrets.PAT_TOKEN }}
+      with:
+        fetch-depth: 0 # Fetch all history for git info
+        submodules: recursive
+        token: ${{ secrets.PAT_TOKEN }}
 
     # Update references
     - name: Git Submodule Update
