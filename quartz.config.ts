@@ -10,7 +10,14 @@ const config: QuartzConfig = {
       provider: "plausible",
     },
     baseUrl: "xurenda.github.io",
-    ignorePatterns: [".obsidian", ".git", ".github", ".gitignore", "README.md", "**/drawing"],
+    ignorePatterns: [
+      ".obsidian",
+      ".git",
+      ".github",
+      "README.md",
+      "Extra/fonts",
+      "Extra/Excalidraw",
+    ],
     defaultDateType: "created",
     theme: {
       typography: {
@@ -44,6 +51,7 @@ const config: QuartzConfig = {
   },
   plugins: {
     transformers: [
+      Plugin.Excalidraw(),
       Plugin.FrontMatter(),
       Plugin.TableOfContents(),
       Plugin.CreatedModifiedDate({
@@ -56,7 +64,7 @@ const config: QuartzConfig = {
       Plugin.Latex({ renderEngine: "katex" }),
       Plugin.Description(),
     ],
-    filters: [Plugin.RemoveDrafts()],
+    filters: [Plugin.RemoveDrafts(), Plugin.ExcalidrawFilter()],
     emitters: [
       Plugin.AliasRedirects(),
       Plugin.ComponentResources({ fontOrigin: "googleFonts" }),
