@@ -17,6 +17,7 @@ const config: QuartzConfig = {
       "README.md",
       "Extra/fonts",
       "Extra/Excalidraw",
+      "Extra/Template",
     ],
     defaultDateType: "created",
     theme: {
