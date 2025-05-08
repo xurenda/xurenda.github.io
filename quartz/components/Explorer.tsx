@@ -95,6 +95,7 @@ export default ((userOpts?: Partial<Options>) => {
           data-savestate={opts.useSavedState}
           data-tree={jsonTree}
         >
+          <div className="folder-counter">{fileTree.count}</div>
           <h1>{opts.title}</h1>
           <svg
             xmlns="http://www.w3.org/2000/svg"

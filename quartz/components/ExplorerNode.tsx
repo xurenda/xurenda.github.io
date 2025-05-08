@@ -41,6 +41,10 @@ export class FileNode {
     this.depth = depth ?? 0
   }
 
+  get count(): number {
+    return this.children.reduce((prev, curr) => prev + curr.count, this.file ? 1 : 0)
+  }
+
   private insert(file: DataWrapper) {
     if (file.path.length === 1) {
       if (file.path[0] !== "index.md") {
@@ -168,6 +172,7 @@ export function ExplorerNode({ node, opts, fullPath, fileData }: ExplorerNodePro
             // Node with entire folder
             // Render svg button + folder name, then children
             <div class="folder-container">
+              <div class="folder-counter">{node.count}</div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="12"

@@ -8,6 +8,8 @@ button#explorer {
   color: var(--dark);
   display: flex;
   align-items: center;
+  position: relative;
+  width: 100%;
 
   & h1 {
     font-size: 1rem;
@@ -80,6 +82,7 @@ svg {
   display: flex;
   align-items: center;
   user-select: none;
+  position: relative;
 
   & div > a {
     color: var(--secondary);
@@ -116,6 +119,11 @@ svg {
       pointer-events: none;
     }
   }
+}
+
+.folder-counter {
+  position: absolute;
+  right: 0;
 }
 
 .folder-icon {
