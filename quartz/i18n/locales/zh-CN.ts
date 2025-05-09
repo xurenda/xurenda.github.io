@@ -33,7 +33,7 @@ export default {
       title: "阅读模式",
     },
     explorer: {
-      title: "探索",
+      title: "全部文章",
     },
     footer: {
       createdWith: "Created with",
@@ -72,13 +72,13 @@ export default {
     },
     folderContent: {
       folder: "文件夹",
-      itemsUnderFolder: ({ count }) => `此文件夹下有${count}条笔记。`,
+      itemsUnderFolder: ({ count }) => `此文件夹下有${count}项。`,
     },
     tagContent: {
       tag: "标签",
       tagIndex: "标签索引",
-      itemsUnderTag: ({ count }) => `此标签下有${count}条笔记。`,
-      showingFirst: ({ count }) => `显示前${count}个标签。`,
+      itemsUnderTag: ({ count }) => `此标签下有${count}项。`,
+      showingFirst: ({ count }) => `显示前${count}项。`,
       totalTags: ({ count }) => `总共有${count}个标签。`,
     },
   },
