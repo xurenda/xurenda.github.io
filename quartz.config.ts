@@ -76,7 +76,11 @@ const config: QuartzConfig = {
       Plugin.ObsidianFlavoredMarkdown({ enableInHtmlEmbed: false }),
       Plugin.GitHubFlavoredMarkdown(),
       Plugin.TableOfContents(),
-      Plugin.CrawlLinks({ markdownLinkResolution: "shortest" }),
+      Plugin.CrawlLinks({
+        markdownLinkResolution: "shortest",
+        openLinksInNewTab: true,
+        externalLinkIcon: true,
+      }),
       Plugin.Description(),
       Plugin.Latex({ renderEngine: "katex" }),
     ],
@@ -86,16 +90,20 @@ const config: QuartzConfig = {
       Plugin.ComponentResources(),
       Plugin.ContentPage(),
       Plugin.FolderPage({
-        sort: (a: any, b: any) =>
-          a.frontmatter.title.localeCompare(b.frontmatter.title, undefined, {
+        sort: (a, b) => {
+          const aTitle = a.frontmatter?.title.toLowerCase() ?? ""
+          const bTitle = b.frontmatter?.title.toLowerCase() ?? ""
+          return aTitle.localeCompare(bTitle, undefined, {
             numeric: true,
             sensitivity: "base",
-          }),
+          })
+        },
       }),
       Plugin.TagPage(),
       Plugin.ContentIndex({
         enableSiteMap: true,
         enableRSS: true,
+        rssSlug: "ssr",
       }),
       Plugin.Assets(),
       Plugin.Static(),
