@@ -54,19 +54,25 @@ export const CreatedModifiedDate: QuartzTransformerPlugin<Partial<Options>> = (u
 
             const fp = file.data.relativePath!
             const fullFp = file.data.filePath!
+            const isRealFp = !file.data._from
+
             for (const source of opts.priority) {
               if (source === "filesystem") {
-                const st = await fs.promises.stat(fullFp)
-                created ||= st.birthtimeMs
-                modified ||= st.mtimeMs
+                if (isRealFp) {
+                  const st = await fs.promises.stat(fullFp)
+                  created ||= st.birthtimeMs
+                  modified ||= st.mtimeMs
+                }
               } else if (source === "frontmatter" && file.data.frontmatter) {
                 created ||= file.data.frontmatter.created as MaybeDate
                 modified ||= file.data.frontmatter.modified as MaybeDate
                 published ||= file.data.frontmatter.published as MaybeDate
               } else if (source === "git" && repo) {
                 try {
-                  const relativePath = path.relative(repositoryWorkdir, fullFp)
-                  modified ||= await repo.getFileLatestModifiedDateAsync(relativePath)
+                  if (isRealFp) {
+                    const relativePath = path.relative(repositoryWorkdir, fullFp)
+                    modified ||= await repo.getFileLatestModifiedDateAsync(relativePath)
+                  }
                 } catch {
                   console.log(
                     chalk.yellow(

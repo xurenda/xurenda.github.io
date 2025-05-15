@@ -6,14 +6,15 @@ import { Root as MDRoot } from "remark-parse/lib"
 import { Root as HTMLRoot } from "hast"
 import { MarkdownContent, ProcessedContent } from "../plugins/vfile"
 import { PerfTimer } from "../util/perf"
-import { read } from "to-vfile"
-import { FilePath, QUARTZ, slugifyFilePath } from "../util/path"
+import { read, toVFile } from "to-vfile"
+import { FilePath, joinSegments, QUARTZ, replaceExt, slugifyFilePath } from "../util/path"
 import path from "path"
 import workerpool, { Promise as WorkerPromise } from "workerpool"
 import { QuartzLogger } from "../util/log"
 import { trace } from "../util/trace"
 import { BuildCtx, WorkerSerializableBuildCtx } from "../util/ctx"
 import chalk from "chalk"
+import type { VFile } from "vfile"
 
 export type QuartzMdProcessor = Processor<MDRoot, MDRoot, MDRoot>
 export type QuartzHtmlProcessor = Processor<undefined, MDRoot, HTMLRoot>
@@ -87,9 +88,25 @@ export function createFileParser(ctx: BuildCtx, fps: FilePath[]) {
   return async (processor: QuartzMdProcessor) => {
     const res: MarkdownContent[] = []
     for (const fp of fps) {
+      const dfp = joinSegments(argv.directory, fp) as FilePath
       try {
         const perf = new PerfTimer()
-        const file = await read(fp)
+        let file: VFile
+        if (fp.toLowerCase().endsWith(".md")) {
+          file = await read(dfp)
+        } else {
+          const basename = path.basename(fp)
+          file = toVFile({
+            path: replaceExt(dfp, ".md"),
+            data: { _from: fp },
+            value: `---
+title: ${replaceExt(basename, "")}
+tags: [${path.extname(basename).slice(1)}]
+---
+
+![[${fp}]]`,
+          })
+        }
 
         // strip leading and trailing whitespace
         file.value = file.value.toString().trim()

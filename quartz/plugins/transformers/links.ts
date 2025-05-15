@@ -46,6 +46,7 @@ export const CrawlLinks: QuartzTransformerPlugin<Partial<Options>> = (userOpts) 
             const transformOptions: TransformOptions = {
               strategy: opts.markdownLinkResolution,
               allSlugs: ctx.allSlugs,
+              supportedFileExts: file.data._from ? [] : ctx.cfg.configuration.supportedFileExts,
             }
 
             visit(tree, "element", (node, _index, _parent) => {

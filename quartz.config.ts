@@ -10,6 +10,7 @@ const config: QuartzConfig = {
   configuration: {
     pageTitle: "My-Notes",
     pageTitleSuffix: "",
+    supportedFileExts: [".md", ".pdf"],
     enableSPA: true,
     enablePopovers: true,
     analytics: { provider: "google", tagId: "G-HG2X1LF956" },
