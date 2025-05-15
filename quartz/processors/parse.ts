@@ -104,7 +104,7 @@ title: ${replaceExt(basename, "")}
 tags: [${path.extname(basename).slice(1)}]
 ---
 
-![[${fp}]]`,
+![[${fp}|?height=100vh]]`,
           })
         }
 

@@ -43,6 +43,9 @@ async function mouseEnterHandler(
   const hash = decodeURIComponent(targetUrl.hash)
   targetUrl.hash = ""
   targetUrl.search = ""
+  if (link.dataset.ext) {
+    targetUrl.href += link.dataset.ext
+  }
   const popoverId = `popover-${link.pathname}`
   const prevPopoverElement = document.getElementById(popoverId)
 

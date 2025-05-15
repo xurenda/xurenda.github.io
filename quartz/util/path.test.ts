@@ -209,7 +209,6 @@ describe("link strategies", () => {
     const opts: TransformOptions = {
       strategy: "absolute",
       allSlugs,
-      supportedFileExts: [],
     }
 
     test("from a/b/c", () => {
@@ -245,7 +244,6 @@ describe("link strategies", () => {
     const opts: TransformOptions = {
       strategy: "shortest",
       allSlugs,
-      supportedFileExts: [],
     }
 
     test("from a/b/c", () => {
@@ -282,7 +280,6 @@ describe("link strategies", () => {
     const opts: TransformOptions = {
       strategy: "relative",
       allSlugs,
-      supportedFileExts: [],
     }
 
     test("from a/b/c", () => {

@@ -8,6 +8,8 @@ import {
   simplifySlug,
   splitAnchor,
   transformLink,
+  matchExts,
+  replaceExt,
 } from "../../util/path"
 import path from "path"
 import { visit } from "unist-util-visit"
@@ -46,7 +48,6 @@ export const CrawlLinks: QuartzTransformerPlugin<Partial<Options>> = (userOpts) 
             const transformOptions: TransformOptions = {
               strategy: opts.markdownLinkResolution,
               allSlugs: ctx.allSlugs,
-              supportedFileExts: file.data._from ? [] : ctx.cfg.configuration.supportedFileExts,
             }
 
             visit(tree, "element", (node, _index, _parent) => {
@@ -102,11 +103,15 @@ export const CrawlLinks: QuartzTransformerPlugin<Partial<Options>> = (userOpts) 
                 // don't process external links or intra-document anchors
                 const isInternal = !(isAbsoluteUrl(dest) || dest.startsWith("#"))
                 if (isInternal) {
-                  dest = node.properties.href = transformLink(
-                    file.data.slug!,
-                    dest,
-                    transformOptions,
-                  )
+                  let link = transformLink(file.data.slug!, dest, transformOptions)
+                  let ext = ""
+                  if (matchExts(link, ctx.cfg.configuration.supportedFileExts)) {
+                    link = replaceExt(link, (_ext) => {
+                      ext = _ext
+                      return ""
+                    }) as RelativeURL
+                  }
+                  dest = node.properties.href = link
 
                   // url.resolve is considered legacy
                   // WHATWG equivalent https://nodejs.dev/en/api/v18/url/#urlresolvefrom-to
@@ -122,6 +127,7 @@ export const CrawlLinks: QuartzTransformerPlugin<Partial<Options>> = (userOpts) 
                   const simple = simplifySlug(full)
                   outgoing.add(simple)
                   node.properties["data-slug"] = full
+                  node.properties["data-ext"] = ext
                 }
 
                 // rewrite link internals if prettylinks is on

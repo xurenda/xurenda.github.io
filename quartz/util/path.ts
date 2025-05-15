@@ -224,40 +224,36 @@ export function getAllSegmentPrefixes(tags: string): string[] {
 export interface TransformOptions {
   strategy: "absolute" | "relative" | "shortest"
   allSlugs: FullSlug[]
-  supportedFileExts: string[]
 }
 
 export function transformLink(src: FullSlug, target: string, opts: TransformOptions): RelativeURL {
-  const res = (() => {
-    let targetSlug = transformInternalLink(target)
+  let targetSlug = transformInternalLink(target)
 
-    if (opts.strategy === "relative") {
-      return targetSlug as RelativeURL
-    } else {
-      const folderTail = isFolderPath(targetSlug) ? "/" : ""
-      const canonicalSlug = stripSlashes(targetSlug.slice(".".length))
-      let [targetCanonical, targetAnchor] = splitAnchor(canonicalSlug)
+  if (opts.strategy === "relative") {
+    return targetSlug as RelativeURL
+  } else {
+    const folderTail = isFolderPath(targetSlug) ? "/" : ""
+    const canonicalSlug = stripSlashes(targetSlug.slice(".".length))
+    let [targetCanonical, targetAnchor] = splitAnchor(canonicalSlug)
 
-      if (opts.strategy === "shortest") {
-        // if the file name is unique, then it's just the filename
-        const matchingFileNames = opts.allSlugs.filter((slug) => {
-          const parts = slug.split("/")
-          const fileName = parts.at(-1)
-          return targetCanonical === fileName
-        })
+    if (opts.strategy === "shortest") {
+      // if the file name is unique, then it's just the filename
+      const matchingFileNames = opts.allSlugs.filter((slug) => {
+        const parts = slug.split("/")
+        const fileName = parts.at(-1)
+        return targetCanonical === fileName
+      })
 
-        // only match, just use it
-        if (matchingFileNames.length === 1) {
-          const targetSlug = matchingFileNames[0]
-          return (resolveRelative(src, targetSlug) + targetAnchor) as RelativeURL
-        }
+      // only match, just use it
+      if (matchingFileNames.length === 1) {
+        const targetSlug = matchingFileNames[0]
+        return (resolveRelative(src, targetSlug) + targetAnchor) as RelativeURL
       }
-
-      // if it's not unique, then it's the absolute path from the vault root
-      return (joinSegments(pathToRoot(src), canonicalSlug) + folderTail) as RelativeURL
     }
-  })()
-  return (matchExts(res, opts.supportedFileExts) ? replaceExt(res, "") : res) as RelativeURL
+
+    // if it's not unique, then it's the absolute path from the vault root
+    return (joinSegments(pathToRoot(src), canonicalSlug) + folderTail) as RelativeURL
+  }
 }
 
 // path helpers
@@ -332,6 +328,12 @@ export function matchExts(fp: string, exts: string[]): boolean {
   return exts.map((i) => i.toLowerCase()).includes(ext.toLowerCase())
 }
 
-export function replaceExt(fp: string, newExt: string): string {
-  return fp.slice(0, fp.lastIndexOf(".")) + newExt
+export function replaceExt(fp: string, newExt: string | ((ext: string) => string)): string {
+  const dotIdx = fp.lastIndexOf(".")
+  const basePath = fp.slice(0, dotIdx)
+  const ext = fp.slice(dotIdx)
+  if (typeof newExt === "function") {
+    newExt = newExt(ext)
+  }
+  return basePath + newExt
 }

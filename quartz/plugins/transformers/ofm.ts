@@ -145,6 +145,7 @@ const videoExtensionRegex = new RegExp(/\.(mp4|webm|ogg|avi|mov|flv|wmv|mkv|mpg|
 const wikilinkImageEmbedRegex = new RegExp(
   /^(?<alt>(?!^\d*x?\d*$).*?)?(\|?\s*?(?<width>\d+)(x(?<height>\d+))?)?$/,
 )
+const wikilinkPdfAnchorRegex = new RegExp(/^#(?<page>\d+)$/)
 
 export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options>> = (userOpts) => {
   const opts = { ...defaultOptions, ...userOpts }
@@ -257,9 +258,25 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options>>
                       value: `<audio src="${url}" controls></audio>`,
                     }
                   } else if ([".pdf"].includes(ext)) {
+                    let page = 1
+                    if (anchor) {
+                      const anchorMatch = wikilinkPdfAnchorRegex.exec(anchor)
+                      const pageFromMatch = Number(anchorMatch?.groups?.page)
+                      if (pageFromMatch > 0) {
+                        page = pageFromMatch
+                      }
+                    }
+                    let style = ""
+                    if (alias) {
+                      style = Array.from(
+                        new URL("https://base.com/" + alias).searchParams.entries(),
+                      )
+                        .map(([key, val]) => `${key}:${val}`)
+                        .join(";")
+                    }
                     return {
                       type: "html",
-                      value: `<iframe src="${url}" class="pdf"></iframe>`,
+                      value: `<iframe src="${url}#page=${page}&view=FitH&pagemode=none" class="pdf" style=${style}></iframe>`,
                     }
                   } else {
                     const block = anchor
