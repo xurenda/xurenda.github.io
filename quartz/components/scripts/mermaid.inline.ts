@@ -22,6 +22,7 @@ class DiagramPanZoom {
     this.setupEventListeners()
     this.setupNavigationControls()
     this.resetTransform()
+    requestAnimationFrame(() => this.resetTransform())
   }
 
   private setupEventListeners() {
@@ -35,6 +36,20 @@ class DiagramPanZoom {
     document.addEventListener("mousemove", mouseMoveHandler)
     document.addEventListener("mouseup", mouseUpHandler)
     window.addEventListener("resize", resizeHandler)
+
+    // Wheel zoom + block page scroll while fullscreen overlay is open (needs passive: false)
+    const wheelHandler = (e: WheelEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
+      let dy = e.deltaY
+      if (e.deltaMode === 1) dy *= 16
+      else if (e.deltaMode === 2) dy *= window.innerHeight
+      const zoomDelta = -dy * 0.001
+      if (zoomDelta !== 0) this.zoom(zoomDelta)
+    }
+    const wheelRoot = this.container.closest("#mermaid-container") ?? this.container
+    wheelRoot.addEventListener("wheel", wheelHandler, { passive: false })
+    this.cleanups.push(() => wheelRoot.removeEventListener("wheel", wheelHandler))
 
     this.cleanups.push(
       () => this.container.removeEventListener("mousedown", mouseDownHandler),
@@ -121,12 +136,27 @@ class DiagramPanZoom {
 
   private resetTransform() {
     this.scale = 1
-    const svg = this.content.querySelector("svg")!
+    const svg = this.content.querySelector("svg")
+    if (!svg) return
+
+    // Avoid transition while measuring / applying reset layout
+    const prevTransition = this.content.style.transition
+    this.content.style.transition = "none"
+    this.content.style.transform = "none"
+    void this.content.offsetHeight
+
+    const containerRect = this.container.getBoundingClientRect()
+    const svgRect = svg.getBoundingClientRect()
+    const svgCx = svgRect.left + svgRect.width / 2
+    const targetCx = containerRect.left + containerRect.width / 2
+
+    // 左右居中；上边与视口（#mermaid-space）上边对齐
     this.currentPan = {
-      x: svg.getBoundingClientRect().width / 2,
-      y: svg.getBoundingClientRect().height / 2,
+      x: targetCx - svgCx,
+      y: containerRect.top - svgRect.top,
     }
     this.updateTransform()
+    this.content.style.transition = prevTransition
   }
 }
 

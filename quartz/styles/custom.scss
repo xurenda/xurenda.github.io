@@ -1,6 +1,15 @@
 @use "./base.scss";
+@use "./variables.scss" as *;
 
 // put your custom CSS here!
+
+// 桌面宽度下取消 .page 的 max-width，让三栏布局撑满视口；小屏/平板仍沿用 base 中的规则
+@media all and ($desktop) {
+  .page {
+    max-width: none;
+    width: 100%;
+  }
+}
 @font-face {
   font-family: "LXGWWenKaiGBScreenR";
   font-style: normal;
